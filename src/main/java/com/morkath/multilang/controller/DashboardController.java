@@ -13,7 +13,7 @@ public class DashboardController extends BaseController {
 	
 	@GetMapping("/dashboard")
 	public String dashboard(Model model) {
-		preparePage(model, "pages/dashboard/index", "Dashboard");
+		preparePage(model, "pages/admin/dashboard", "Dashboard");
 		return "layouts/vertical";
 	}
 }

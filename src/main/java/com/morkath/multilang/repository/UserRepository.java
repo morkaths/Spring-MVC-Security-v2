@@ -1,9 +1,10 @@
 package com.morkath.multilang.repository;
 
-import com.morkath.multilang.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.morkath.multilang.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	UserEntity findByUsername(String username);
-    UserEntity findByEmail(String email);
+	UserEntity findByEmail(String email);
 }

@@ -1,9 +1,13 @@
 package com.morkath.multilang.core;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.lang.reflect.Field;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
+@Transactional
 public class BaseDaoImpl<T, ID> implements BaseDao<T, ID> {
 
     @PersistenceContext
@@ -17,18 +21,39 @@ public class BaseDaoImpl<T, ID> implements BaseDao<T, ID> {
 
     @Override
     public List<T> findAll() {
-        return entityManager.createQuery("from " + entityClass.getSimpleName(), entityClass).getResultList();
+        return entityManager.createQuery("FROM " + entityClass.getSimpleName(), entityClass).getResultList();
     }
+    
+    @Override
+    public List<T> findAllByField(String fieldName, Object value) {
+		String queryString = "FROM " + entityClass.getSimpleName() + " WHERE " + fieldName + " = :value";
+		return entityManager.createQuery(queryString, entityClass)
+				.setParameter("value", value)
+				.getResultList();
+	}
 
     @Override
     public T findById(ID id) {
         return entityManager.find(entityClass, id);
     }
+    
+    @Override
+    public T findOneByField(String fieldName, Object value) {
+		String queryString = "FROM " + entityClass.getSimpleName() + " WHERE " + fieldName + " = :value";
+		List<T> results = entityManager.createQuery(queryString, entityClass)
+	            .setParameter("value", value)
+	            .getResultList();
+	    return results.isEmpty() ? null : results.get(0);
+    }
 
     @Override
     public T save(T entity) {
-        entityManager.persist(entity);
-        return entity;
+        if (entity == null) {
+            throw new IllegalArgumentException("Entity cannot be null");
+        }
+        T savedEntity = entityManager.merge(entity);
+        entityManager.flush();
+        return savedEntity;
     }
 
     @Override
@@ -37,7 +62,10 @@ public class BaseDaoImpl<T, ID> implements BaseDao<T, ID> {
     }
 
     @Override
-    public void delete(T entity) {
-        entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
-    }
+    public void delete(ID id) {
+		T entity = findById(id);
+		if (entity != null) {
+			entityManager.remove(entity);
+		}
+	}
 }

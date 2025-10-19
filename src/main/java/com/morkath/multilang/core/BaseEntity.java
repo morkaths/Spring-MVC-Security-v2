@@ -4,28 +4,29 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	@Column(name = "created_at", nullable = false, updatable = false)
+	@CreatedDate
+	@Column(name = "created_at", nullable = true, updatable = false)
     private LocalDateTime createdAt;
     
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+	@LastModifiedDate
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
+	
+	@LastModifiedBy
+	@Column(name = "modified_by")
+	private String modifiedBy;
 	
 	public Long getId() {
         return id;
@@ -35,7 +36,12 @@ public abstract class BaseEntity {
         return createdAt;
     }
     
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public LocalDateTime getModifiedAt() {
+		return modifiedAt;
     }
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+    
 }
