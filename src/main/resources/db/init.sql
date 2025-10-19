@@ -1,96 +1,117 @@
--- Tạo database
+-- Create database
 CREATE DATABASE IF NOT EXISTS multilang;
 USE multilang;
 
--- Bảng ngôn ngữ
-CREATE TABLE Language (
-    LanguageID CHAR(2) PRIMARY KEY,
-    Language VARCHAR(20) NOT NULL
+-- Drop tables if exist (for clean setup)
+DROP TABLE IF EXISTS auth_user_role;
+DROP TABLE IF EXISTS auth_role_permission;
+DROP TABLE IF EXISTS product_translation;
+DROP TABLE IF EXISTS product_category_translation;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS product_category;
+DROP TABLE IF EXISTS auth_user;
+DROP TABLE IF EXISTS auth_role;
+DROP TABLE IF EXISTS auth_permission;
+DROP TABLE IF EXISTS language;
+
+-- Create Language table
+CREATE TABLE language (
+    LanguageID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    Code VARCHAR(10) NOT NULL UNIQUE,
+    Name VARCHAR(100) NOT NULL,
+    IsDefault BOOLEAN DEFAULT FALSE,
+    Status INT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Bảng danh mục sản phẩm
-CREATE TABLE ProductCategory (
-    ProductCategoryID INT PRIMARY KEY AUTO_INCREMENT,
-    CanBeShipped BIT NOT NULL
-);
-
--- Bảng sản phẩm
-CREATE TABLE Product (
-    ProductID INT PRIMARY KEY AUTO_INCREMENT,
-    Price DECIMAL(10,2) NOT NULL,
-    Weight DECIMAL(4,2),
-    ProductCategoryID INT,
-    FOREIGN KEY (ProductCategoryID) REFERENCES ProductCategory(ProductCategoryID)
-        ON DELETE SET NULL
-        ON UPDATE CASCADE
-);
-
--- Bảng bản dịch cho sản phẩm
-CREATE TABLE ProductTranslation (
-    ProductID INT,
-    LanguageID CHAR(2),
-    ProductName VARCHAR(100),
-    ProductDescription VARCHAR(100),
-    PRIMARY KEY (ProductID, LanguageID),
-    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    FOREIGN KEY (LanguageID) REFERENCES Language(LanguageID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
--- Bảng bản dịch cho danh mục sản phẩm
-CREATE TABLE ProductCategoryTranslation (
-    ProductCategoryID INT,
-    LanguageID CHAR(2),
-    CategoryName VARCHAR(100),
-    PRIMARY KEY (ProductCategoryID, LanguageID),
-    FOREIGN KEY (ProductCategoryID) REFERENCES ProductCategory(ProductCategoryID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    FOREIGN KEY (LanguageID) REFERENCES Language(LanguageID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
--- Bảng user
-CREATE TABLE auth_user (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    status INT DEFAULT 1
-);
-
--- Bảng role
-CREATE TABLE auth_role (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    code VARCHAR(50) NOT NULL UNIQUE,
-    name VARCHAR(100) NOT NULL
-);
-
--- Bảng permission
+-- Create AuthPermission table
 CREATE TABLE auth_permission (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    code VARCHAR(50) NOT NULL UNIQUE,
-    name VARCHAR(100) NOT NULL
+    UserPermissionID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    Code VARCHAR(100) NOT NULL UNIQUE,
+    Name VARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Bảng liên kết user-role
+-- Create AuthRole table
+CREATE TABLE auth_role (
+    RoleID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    Code VARCHAR(100) NOT NULL UNIQUE,
+    Name VARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create AuthUser table
+CREATE TABLE auth_user (
+    UserID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    FullName VARCHAR(255),
+    Status INT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create ProductCategory table
+CREATE TABLE product_category (
+    CategoryID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    Code VARCHAR(100) NOT NULL UNIQUE,
+    DefaultName VARCHAR(255) NOT NULL,
+    Status INT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create Product table
+CREATE TABLE product (
+    ProductID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    Code VARCHAR(100) NOT NULL UNIQUE,
+    DefaultName VARCHAR(255) NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
+    CategoryID BIGINT,
+    Status INT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (CategoryID) REFERENCES product_category(CategoryID)
+);
+
+-- Create junction tables
 CREATE TABLE auth_user_role (
-    user_id INT,
-    role_id INT,
-    PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES auth_role(id) ON DELETE CASCADE
+    UserID BIGINT,
+    RoleID BIGINT,
+    PRIMARY KEY (UserID, RoleID),
+    FOREIGN KEY (UserID) REFERENCES auth_user(UserID) ON DELETE CASCADE,
+    FOREIGN KEY (RoleID) REFERENCES auth_role(RoleID) ON DELETE CASCADE
 );
 
--- Bảng liên kết role-permission
 CREATE TABLE auth_role_permission (
-    role_id INT,
-    permission_id INT,
-    PRIMARY KEY (role_id, permission_id),
-    FOREIGN KEY (role_id) REFERENCES auth_role(id) ON DELETE CASCADE,
-    FOREIGN KEY (permission_id) REFERENCES auth_permission(id) ON DELETE CASCADE
+    RoleID BIGINT,
+    PermissionID BIGINT,
+    PRIMARY KEY (RoleID, PermissionID),
+    FOREIGN KEY (RoleID) REFERENCES auth_role(RoleID) ON DELETE CASCADE,
+    FOREIGN KEY (PermissionID) REFERENCES auth_permission(UserPermissionID) ON DELETE CASCADE
+);
+
+-- Create translation tables with composite keys
+CREATE TABLE product_category_translation (
+    CategoryID BIGINT,
+    LanguageID BIGINT,
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
+    PRIMARY KEY (CategoryID, LanguageID),
+    FOREIGN KEY (CategoryID) REFERENCES product_category(CategoryID) ON DELETE CASCADE,
+    FOREIGN KEY (LanguageID) REFERENCES language(LanguageID) ON DELETE CASCADE
+);
+
+CREATE TABLE product_translation (
+    ProductID BIGINT,
+    LanguageID BIGINT,
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
+    PRIMARY KEY (ProductID, LanguageID),
+    FOREIGN KEY (ProductID) REFERENCES product(ProductID) ON DELETE CASCADE,
+    FOREIGN KEY (LanguageID) REFERENCES language(LanguageID) ON DELETE CASCADE
 );

@@ -57,3 +57,39 @@
         </div>
     </section>
 </div>
+<c:if test="${showModal}">
+    <script>
+        $(document).ready(function() {
+            $('#addLanguageModal').modal('show');
+        });
+    </script>
+</c:if>
+<!-- Modal Add Language -->
+<div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form:form action="/admin/language/add" method="post" modelAttribute="languageForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addLanguageModalLabel">Add Language</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="languageID" class="form-label">Language ID</label>
+            <form:input path="languageID" cssClass="form-control" id="languageID" required="required"/>
+            <form:errors path="languageID" cssClass="text-danger"/>
+          </div>
+          <div class="mb-3">
+            <label for="language" class="form-label">Language Name</label>
+            <form:input path="language" cssClass="form-control" id="language" required="required"/>
+            <form:errors path="language" cssClass="text-danger"/>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add Language</button>
+        </div>
+      </form:form>
+    </div>
+  </div>
+</div>

@@ -4,17 +4,17 @@ import org.springframework.stereotype.Repository;
 
 import com.morkath.multilang.core.BaseDaoImpl;
 import com.morkath.multilang.dao.RoleDao;
-import com.morkath.multilang.entity.RoleEntity;
+import com.morkath.multilang.entity.AuthRoleEntity;
 
 @Repository
-public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDao {
+public class RoleDaoImpl extends BaseDaoImpl<AuthRoleEntity, Long> implements RoleDao {
 	
 	public RoleDaoImpl() {
-		super(RoleEntity.class);
+		super(AuthRoleEntity.class);
 	}
 	
 	@Override
-	public RoleEntity findByCode(String code) {
+	public AuthRoleEntity findByCode(String code) {
 		return findOneByField("code", code);
 	}
 

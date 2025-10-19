@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.morkath.multilang.core.BaseController;
 import com.morkath.multilang.dto.UserForm;
-import com.morkath.multilang.entity.UserEntity;
+import com.morkath.multilang.entity.AuthUserEntity;
 import com.morkath.multilang.service.UserService;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/users")
 public class UserController extends BaseController {
 
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/user")
+	@GetMapping
 	public String index(HttpServletRequest request, Model model) {
 		model.addAttribute("users", userService.getAllUsers());
 		model.addAttribute("userForm", new UserForm());
@@ -32,7 +32,7 @@ public class UserController extends BaseController {
 		return "layouts/vertical";
 	}
 
-	@PostMapping("/user/add")
+	@PostMapping("/add")
 	public String addUser(
 		@Valid @ModelAttribute("userForm") UserForm userForm, 
 		BindingResult bindingResult,
@@ -43,7 +43,7 @@ public class UserController extends BaseController {
 			preparePage(model, "pages/user/index", "User Management");
 			return "layouts/vertical"; // Return to form with errors
 		}
-		UserEntity user = userService.createUser(userForm);
+		AuthUserEntity user = userService.createUser(userForm);
 		if (user == null) {
 			bindingResult.rejectValue("username", "error.userForm", "Không thể tạo người dùng");
 			model.addAttribute("users", userService.getAllUsers());

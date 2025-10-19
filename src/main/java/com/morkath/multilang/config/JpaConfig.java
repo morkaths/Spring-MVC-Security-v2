@@ -38,7 +38,7 @@ public class JpaConfig {
         props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto", "update"));
         props.put("hibernate.show_sql", env.getProperty("hibernate.show_sql", "true"));
         props.put("hibernate.format_sql", env.getProperty("hibernate.format_sql", "true"));
-        props.put("hibernate.enable_lazy_load_no_trans", "true");
+        props.put("hibernate.enable_lazy_load_no_trans", env.getProperty("hibernate.enable_lazy_load_no_trans", "true"));
         em.setJpaProperties(props);
 
         return em;

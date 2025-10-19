@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.morkath.multilang.dao.UserDao;
 import com.morkath.multilang.dto.UserForm;
-import com.morkath.multilang.entity.UserEntity;
+import com.morkath.multilang.entity.AuthUserEntity;
 import com.morkath.multilang.service.UserService;
 
 @Service
@@ -17,23 +17,23 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 
 	@Override
-	public List<UserEntity> getAllUsers() {
+	public List<AuthUserEntity> getAllUsers() {
 		return userDao.findAll();
 	}
 
 	@Override
-	public UserEntity getUserById(Long id) {
+	public AuthUserEntity getUserById(Long id) {
 		return userDao.findById(id);
 	}
 
 	@Override
-	public UserEntity getUserByUsername(String username) {
+	public AuthUserEntity getUserByUsername(String username) {
 		return userDao.findByUsername(username);
 	}
 
 	@Override
-	public UserEntity createUser(UserForm userForm) {
-		UserEntity user = new UserEntity();
+	public AuthUserEntity createUser(UserForm userForm) {
+		AuthUserEntity user = new AuthUserEntity();
 		user.setUsername(userForm.getUsername());
 		user.setEmail(userForm.getEmail());
 		user.setPassword(userForm.getPassword());
@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserEntity updateUser(UserForm userForm) {
-		UserEntity user = userDao.findById(userForm.getId());
+	public AuthUserEntity updateUser(UserForm userForm) {
+		AuthUserEntity user = userDao.findById(userForm.getId());
 		if (user != null) {
 			user.setUsername(userForm.getUsername());
 			user.setEmail(userForm.getEmail());

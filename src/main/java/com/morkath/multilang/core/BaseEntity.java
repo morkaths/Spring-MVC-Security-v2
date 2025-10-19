@@ -12,25 +12,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 	
 	@CreatedDate
-	@Column(name = "created_at", nullable = true, updatable = false)
+	@Column(name = "CreatedAt", nullable = true, updatable = false)
     private LocalDateTime createdAt;
     
 	@LastModifiedDate
-    @Column(name = "modified_at")
+    @Column(name = "ModifiedAt", nullable = true)
     private LocalDateTime modifiedAt;
 	
 	@LastModifiedBy
-	@Column(name = "modified_by")
+	@Column(name = "ModifiedBy", nullable = true, length = 100)
 	private String modifiedBy;
-	
-	public Long getId() {
-        return id;
-    }
 	
 	public LocalDateTime getCreatedAt() {
         return createdAt;

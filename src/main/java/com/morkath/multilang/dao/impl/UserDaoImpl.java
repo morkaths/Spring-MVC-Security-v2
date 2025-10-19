@@ -4,27 +4,27 @@ import org.springframework.stereotype.Repository;
 
 import com.morkath.multilang.core.BaseDaoImpl;
 import com.morkath.multilang.dao.UserDao;
-import com.morkath.multilang.entity.UserEntity;
+import com.morkath.multilang.entity.AuthUserEntity;
 
 @Repository
-public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDao {
+public class UserDaoImpl extends BaseDaoImpl<AuthUserEntity, Long> implements UserDao {
 	
 	public UserDaoImpl() {
-        super(UserEntity.class);
+        super(AuthUserEntity.class);
     }
 	
 	@Override
-    public UserEntity findByUsername(String username) {
+    public AuthUserEntity findByUsername(String username) {
     	return findOneByField("username", username);
     }
 
     @Override
-    public UserEntity findByEmail(String email) {
+    public AuthUserEntity findByEmail(String email) {
     	return findOneByField("email", email);
     }
 	
     @Override
-    public UserEntity save(UserEntity user) {
+    public AuthUserEntity save(AuthUserEntity user) {
 		return super.save(user);
 	}
 	

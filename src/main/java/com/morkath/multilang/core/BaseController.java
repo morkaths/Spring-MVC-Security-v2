@@ -12,11 +12,23 @@ public abstract class BaseController {
         return new AssetDTO("Default Title");
     }
 	
+	/**
+	 * Prepare the page with content and title
+	 * @param model - The model to add attributes to
+	 * @param page - The content page to be displayed
+	 * @param title - The title of the page
+	 */
 	protected void preparePage(Model model, String page, String title) {
         model.addAttribute("content", page);
         model.addAttribute("assets", new AssetDTO(title));
     }
 	
+	/**
+	 * Prepare the page with content and assets
+	 * @param model - The model to add attributes to
+	 * @param page - The content page to be displayed
+	 * @param assets - The AssetDTO containing page assets
+	 */
 	protected void preparePage(Model model, String page, AssetDTO assets) {
 		model.addAttribute("content", page);
 		model.addAttribute("assets", assets);

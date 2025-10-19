@@ -3,13 +3,13 @@ package com.morkath.multilang.service;
 import java.util.List;
 
 import com.morkath.multilang.dto.UserForm;
-import com.morkath.multilang.entity.UserEntity;
+import com.morkath.multilang.entity.AuthUserEntity;
 
 public interface UserService {
-	public List<UserEntity> getAllUsers();
-	public UserEntity getUserById(Long id);
-	public UserEntity getUserByUsername(String username);
-	public UserEntity createUser(UserForm user);
-	public UserEntity updateUser(UserForm user);
-	public void deleteUser(Long id);
+	List<AuthUserEntity> getAllUsers();
+	AuthUserEntity getUserById(Long id);
+	AuthUserEntity getUserByUsername(String username);
+	AuthUserEntity createUser(UserForm user);
+	AuthUserEntity updateUser(UserForm user);
+	void deleteUser(Long id);
 }

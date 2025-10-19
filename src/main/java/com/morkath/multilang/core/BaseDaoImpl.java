@@ -1,6 +1,5 @@
 package com.morkath.multilang.core;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.persistence.EntityManager;
