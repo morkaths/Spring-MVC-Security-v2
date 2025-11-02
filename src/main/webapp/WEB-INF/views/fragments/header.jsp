@@ -128,7 +128,7 @@
 								<hr class="dropdown-divider">
 							</li>
 							<li>
-								<a class="dropdown-item" href="<c:url value='/logout' />">
+								<a class="dropdown-item" href="<c:url value='/auth/logout' />">
 									<i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout
 								</a>
 							</li>

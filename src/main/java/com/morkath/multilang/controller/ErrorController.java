@@ -1,42 +1,31 @@
 package com.morkath.multilang.controller;
 
-import java.util.Collections;
-
-import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.morkath.multilang.dto.AssetDTO;
+import com.morkath.multilang.core.BaseController;
 
-@ControllerAdvice
-public class ErrorController {
-	
-	@ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handle404(NoHandlerFoundException ex, Model model) {
-        model.addAttribute("content", "/WEB-INF/views/pages/error/404.jsp");
-        model.addAttribute("assets", new AssetDTO("Not Found", Collections.emptyList(), Collections.emptyList()));
+@Controller
+@RequestMapping("/error")
+public class ErrorController extends BaseController {
+
+    @GetMapping("/404")
+    public String error404(Model model) {
+        preparePage(model, "pages/error/404", "Not Found");
         return "layouts/error";
     }
 
-	@ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handle403(Exception ex, Model model) {
-        model.addAttribute("content", "/WEB-INF/views/pages/error/403.jsp");
-        model.addAttribute("assets", new AssetDTO("Access Forbidden", Collections.emptyList(), Collections.emptyList()));
+    @GetMapping("/403")
+    public String error403(Model model) {
+        preparePage(model, "pages/error/403", "Access Forbidden");
         return "layouts/error";
     }
 
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handle500(Exception ex, Model model) {
-        model.addAttribute("content", "/WEB-INF/views/pages/error/500.jsp");
-        model.addAttribute("assets", new AssetDTO("System Error", Collections.emptyList(), Collections.emptyList()));
+    @GetMapping("/500")
+    public String error500(Model model) {
+        preparePage(model, "pages/error/500", "System Error");
         return "layouts/error";
     }
-	
 }

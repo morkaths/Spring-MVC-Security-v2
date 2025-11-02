@@ -25,7 +25,7 @@
     <div id="error">
 
         <div class="error-page container">
-            <jsp:include page="${content}"/>
+            <jsp:include page="/WEB-INF/views/${content}.jsp"/>
         </div>
 
     </div>

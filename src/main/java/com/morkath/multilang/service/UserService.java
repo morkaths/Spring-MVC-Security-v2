@@ -7,6 +7,7 @@ import com.morkath.multilang.entity.AuthUserEntity;
 
 public interface UserService {
 	List<AuthUserEntity> getAllUsers();
+	AuthUserEntity getCurrentUser();
 	AuthUserEntity getUserById(Long id);
 	AuthUserEntity getUserByUsername(String username);
 	AuthUserEntity createUser(UserForm user);

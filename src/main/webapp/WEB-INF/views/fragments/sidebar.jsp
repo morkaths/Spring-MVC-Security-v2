@@ -103,7 +103,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="<c:url value='/account-profile' />" class='sidebar-link' data-path="/account-profile">
+                    <a href="<c:url value='/profile' />" class='sidebar-link' data-path="/profile">
                         <i class="bi bi-person-circle"></i>
                         <span>Tài khoản</span>
                     </a>

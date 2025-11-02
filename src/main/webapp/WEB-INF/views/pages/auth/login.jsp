@@ -5,7 +5,7 @@
                 <div id="auth-left">
                     <div class="auth-logo">
                         <a href="<c:url value='/'/>">
-                            <img src="<c:url value='/assets/static/images/logos/logo.svg'/>" alt="Logo">
+                            <jsp:include page="/WEB-INF/views/fragments/logo.jsp" />
                         </a>
                     </div>
                     <h1 class="auth-title">Log in.</h1>

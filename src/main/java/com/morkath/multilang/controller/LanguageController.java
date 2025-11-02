@@ -24,7 +24,7 @@ public class LanguageController extends BaseController {
 	public String index(Model model) {
 		model.addAttribute("languages", languageService.getAllLanguages());
 		model.addAttribute("languageForm", new LanguageDTO());
-		preparePage(model, "pages/language/index", "Language Management");
+		preparePage(model, "pages/admin/language", "Language Management");
 		return "layouts/vertical";
 	}
 	
@@ -37,7 +37,7 @@ public class LanguageController extends BaseController {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("languages", languageService.getAllLanguages());
       model.addAttribute("showModal", true);
-			preparePage(model, "pages/language/index", "Language Management");
+			preparePage(model, "pages/admin/language", "Language Management");
 			return "layouts/vertical";
 		}
 		languageService.createLanguage(languageForm);

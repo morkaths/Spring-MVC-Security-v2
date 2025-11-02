@@ -9,33 +9,31 @@ INSERT INTO language (LanguageID, Language) VALUES
 
 -- Permissions
 INSERT INTO auth_permission (Code, Name) VALUES
-('USER:READ', 'Read Users'),
-('USER:WRITE', 'Write Users'),
-('USER:DELETE', 'Delete Users'),
-('PRODUCT:READ', 'Read Products'),
-('PRODUCT:WRITE', 'Write Products'),
-('PRODUCT:DELETE', 'Delete Products'),
-('CATEGORY:READ', 'Read Categories'),
-('CATEGORY:WRITE', 'Write Categories'),
-('CATEGORY:DELETE', 'Delete Categories'),
-('ADMIN:PANEL', 'Access Admin Panel'),
-('SYSTEM:CONFIG', 'System Configuration');
+('user:read', 'Read Users'),
+('user:write', 'Write Users'),
+('user:delete', 'Delete Users'),
+('product:read', 'Read Products'),
+('product:write', 'Write Products'),
+('product:delete', 'Delete Products'),
+('category:read', 'Read Categories'),
+('category:write', 'Write Categories'),
+('category:delete', 'Delete Categories'),
+('language:read', 'Read Language'),
+('language:write', 'Write Language');
 
 -- Roles
 INSERT INTO auth_role (Code, Name) VALUES
-('ADMIN', 'Administrator'),
-('USER', 'Regular User'),
-('MANAGER', 'Manager'),
-('EDITOR', 'Content Editor'),
-('VIEWER', 'Read Only User');
+('admin', 'Administrator'),
+('user', 'Regular User'),
+('manager', 'Manager'),
+('staff', 'Staff');
 
 -- Users (password: 123456 - BCrypt hash)
 INSERT INTO auth_user (Username, Password, Email, FullName, Status) VALUES
 ('admin',   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'admin@example.com',   'System Administrator', 1),
 ('user',    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'user@example.com',    'Regular User',         1),
 ('manager', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'manager@example.com', 'Manager',              1),
-('editor',  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'editor@example.com',  'Content Editor',       1),
-('viewer',  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'viewer@example.com',  'Read Only User',       1);
+('staff',  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.', 'staff@example.com',    'Staff',                1);
 
 -- Product Categories
 INSERT INTO product_category (CanBeShipped) VALUES
@@ -66,21 +64,18 @@ INSERT INTO auth_user_role (UserID, RoleID) VALUES
 (1, 1), -- admin -> ADMIN
 (2, 2), -- user -> USER
 (3, 3), -- manager -> MANAGER
-(4, 4), -- editor -> EDITOR
-(5, 5); -- viewer -> VIEWER
+(4, 4); -- staff -> STAFF
 
 -- Role-Permission assignments
 INSERT INTO auth_role_permission (RoleID, PermissionID) VALUES
--- ADMIN has all permissions
+-- admin has all permissions
 (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11),
--- USER has basic read permissions
+-- user has basic read permissions
 (2, 1), (2, 4), (2, 7),
--- MANAGER has read/write permissions
+-- manager has read/write permissions
 (3, 1), (3, 2), (3, 4), (3, 5), (3, 7), (3, 8), (3, 10),
--- EDITOR has content permissions
-(4, 4), (4, 5), (4, 7), (4, 8),
--- VIEWER has only read permissions
-(5, 1), (5, 4), (5, 7);
+-- staff has content permissions
+(4, 4), (4, 5), (4, 7), (4, 8);
 
 -- Product Category Translations
 INSERT INTO product_category_translation (ProductCategoryID, LanguageID, CategoryName) VALUES

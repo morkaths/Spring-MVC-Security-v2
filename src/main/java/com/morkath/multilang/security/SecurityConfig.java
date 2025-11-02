@@ -2,14 +2,18 @@ package com.morkath.multilang.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.morkath.multilang.constant.RoleConstant;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -17,29 +21,30 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-	@SuppressWarnings("deprecation")
-	@Bean
+    @SuppressWarnings("deprecation")
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        .authorizeRequests()
-            .antMatchers("/admin/**").authenticated()
-            .anyRequest().permitAll()
-        .and()
-        .formLogin()
-            .loginPage("/auth/login")
-            .usernameParameter("username")
-            .passwordParameter("password")
-            .defaultSuccessUrl("/", false)
-            .permitAll()
-        .and()
-        .logout()
-            .permitAll()
-        .and()
-        .sessionManagement()
-            .maximumSessions(1)
-            .maxSessionsPreventsLogin(false);
+            .authorizeRequests(requests -> requests
+            		.antMatchers("/profile/**").authenticated()
+                    .antMatchers("/admin/**").hasRole(RoleConstant.ADMIN)
+                    .anyRequest().permitAll())
+            .formLogin(login -> login
+                    .loginPage("/auth/login")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/", false)
+                    .permitAll())
+            .logout(logout -> logout
+                    .logoutUrl("/auth/logout")
+                    .permitAll())
+            .sessionManagement(management -> management
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(false))
+            .exceptionHandling(exception -> exception
+                    .accessDeniedPage("/error/403"));
 
-    return http.build();
+        return http.build();
     }
-	
+
 }

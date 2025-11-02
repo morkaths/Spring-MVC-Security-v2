@@ -1,10 +1,10 @@
-package com.morkath.multilang.service.impl;
+package com.morkath.multilang.security;
 
+import com.morkath.multilang.constant.SystemConstant;
 import com.morkath.multilang.entity.AuthRoleEntity;
 import com.morkath.multilang.entity.AuthUserEntity;
-import com.morkath.multilang.repository.UserRepository;
-import com.morkath.multilang.constant.SystemConstant;
-import com.morkath.multilang.dto.MyUser;
+import com.morkath.multilang.repository.AuthUserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +20,7 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private AuthUserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -31,10 +31,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 		// Get role
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		for (AuthRoleEntity role : user.getRoles()) {
-			authorities.add(new SimpleGrantedAuthority(role.getCode()));
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getCode()));
+			role.getPermissions().forEach(permission -> {
+				authorities.add(new SimpleGrantedAuthority(permission.getCode()));
+			});
 		}
-		MyUser myUser = new MyUser(user.getUsername(), user.getPassword(), true, true, true, true, authorities);
-		myUser.setFullName(user.getFullName());
-		return myUser;
+		return new AuthUser(user, authorities);
 	}
 }

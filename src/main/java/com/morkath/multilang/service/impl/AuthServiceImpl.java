@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.morkath.multilang.entity.AuthRoleEntity;
 import com.morkath.multilang.entity.AuthUserEntity;
-import com.morkath.multilang.repository.RoleRepository;
-import com.morkath.multilang.repository.UserRepository;
+import com.morkath.multilang.repository.AuthRoleRepository;
+import com.morkath.multilang.repository.AuthUserRepository;
 import com.morkath.multilang.service.AuthService;
 import com.morkath.multilang.util.PasswordUtil;
 
@@ -17,10 +17,10 @@ import com.morkath.multilang.util.PasswordUtil;
 public class AuthServiceImpl implements AuthService {
 	
 	@Autowired
-	private UserRepository userRepository;
+	private AuthUserRepository userRepository;
 	
 	@Autowired
-	private RoleRepository roleRepository;
+	private AuthRoleRepository roleRepository;
 	
 	@Override
     public boolean register(String username, String password, String email) {
