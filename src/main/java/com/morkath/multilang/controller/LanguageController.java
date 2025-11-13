@@ -3,6 +3,7 @@ package com.morkath.multilang.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,10 +25,11 @@ public class LanguageController extends BaseController {
 	public String index(Model model) {
 		model.addAttribute("languages", languageService.getAllLanguages());
 		model.addAttribute("languageForm", new LanguageDTO());
-		preparePage(model, "pages/admin/language", "Language Management");
+		preparePage(model, "pages/language/index", "Language Management");
 		return "layouts/vertical";
 	}
 	
+	@PreAuthorize("hasAuthority('language:write')")
 	@GetMapping("/add")
 	public String addLanguage(
 		@Valid @ModelAttribute("languageForm") LanguageDTO languageForm,
@@ -37,11 +39,11 @@ public class LanguageController extends BaseController {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("languages", languageService.getAllLanguages());
       model.addAttribute("showModal", true);
-			preparePage(model, "pages/admin/language", "Language Management");
+			preparePage(model, "pages/language/index", "Language Management");
 			return "layouts/vertical";
 		}
 		languageService.createLanguage(languageForm);
-		return "redirect:/admin/language";
+		return "redirect:/admin/languages";
 	}
 	
 	

@@ -19,7 +19,11 @@ INSERT INTO auth_permission (Code, Name) VALUES
 ('category:write', 'Write Categories'),
 ('category:delete', 'Delete Categories'),
 ('language:read', 'Read Language'),
-('language:write', 'Write Language');
+('language:write', 'Write Language'),
+('language:delete', 'Delete Language'),
+('role:read', 'Read Roles'),
+('role:write', 'Write Roles'),
+('role:delete', 'Delete Roles'); 
 
 -- Roles
 INSERT INTO auth_role (Code, Name) VALUES
@@ -70,10 +74,11 @@ INSERT INTO auth_user_role (UserID, RoleID) VALUES
 INSERT INTO auth_role_permission (RoleID, PermissionID) VALUES
 -- admin has all permissions
 (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11),
+(1, 12), (1, 13), (1, 14), (1, 15),
 -- user has basic read permissions
-(2, 1), (2, 4), (2, 7),
+(2, 1), (2, 4), (2, 7), (2, 12),
 -- manager has read/write permissions
-(3, 1), (3, 2), (3, 4), (3, 5), (3, 7), (3, 8), (3, 10),
+(3, 1), (3, 2), (3, 4), (3, 5), (3, 7), (3, 8), (3, 10), (3, 12), (3, 13),
 -- staff has content permissions
 (4, 4), (4, 5), (4, 7), (4, 8);
 

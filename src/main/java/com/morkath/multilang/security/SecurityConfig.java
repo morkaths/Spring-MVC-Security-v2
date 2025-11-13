@@ -27,7 +27,7 @@ public class SecurityConfig {
         http
             .authorizeRequests(requests -> requests
             		.antMatchers("/profile/**").authenticated()
-                    .antMatchers("/admin/**").hasRole(RoleConstant.ADMIN)
+                    .antMatchers("/admin/**").hasAnyRole(RoleConstant.ADMIN, RoleConstant.MANAGER, RoleConstant.STAFF)
                     .anyRequest().permitAll())
             .formLogin(login -> login
                     .loginPage("/auth/login")
