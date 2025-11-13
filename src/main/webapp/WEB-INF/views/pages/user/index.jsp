@@ -74,8 +74,10 @@
                                                     <form
                                                         action="${pageContext.request.contextPath}/admin/users/delete/${user.id}"
                                                         method="post" style="display:inline;">
+                                                        <input type="hidden" name="${_csrf.parameterName}"
+                                                            value="${_csrf.token}" />
                                                         <button type="submit" class="dropdown-item text-danger"
-                                                            onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
+                                                            onclick="return confirm('Are you sure you want to delete this user?');">
                                                             <i class="bi bi-trash me-2"></i>Delete
                                                         </button>
                                                     </form>
